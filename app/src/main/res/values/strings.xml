@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Memories</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="log_in">Log In</string>
+    <string name="take_picture">Take Picture</string>
+    <string name="submit">Submit</string>
+    <string name="a_picture_should_be_worth_a_thousand_words_and_some_more_so_never_forget_a_caption">a picture should be worth a thousand words and some more, so never forget a caption!</string>
+    <string name="taken_picture">taken picture</string>
+</resources>
