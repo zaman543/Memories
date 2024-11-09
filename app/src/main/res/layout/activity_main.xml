@@ -12,14 +12,13 @@
         <FrameLayout
             android:id="@+id/flContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/bottomNavigation"
-            />
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottomNavigation" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
             app:menu="@menu/menu_bottom_navigation" />
 </RelativeLayout>

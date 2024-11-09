@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/llPost"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="15dp"
@@ -18,10 +17,11 @@
         <ImageView
             android:id="@+id/ivProfilePicture"
             android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:adjustViewBounds="true"
+            android:contentDescription="@string/profile"
             android:scaleType="fitCenter"
             tools:srcCompat="@drawable/user" />
 
@@ -41,18 +41,21 @@
         android:layout_height="300dp"
         android:layout_margin="10dp"
         android:layout_weight="1"
+        android:contentDescription="@string/post_image"
         android:scaleType="centerCrop"
         tools:srcCompat="@drawable/flowersandmountains" />
 
     <TextView
         android:id="@+id/tvPostDescription"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:layout_weight="1"
-        android:ellipsize="end"
-        android:maxLines="3"
         android:minLines="1"
         android:singleLine="false"
         android:text="@string/a_picture_should_be_worth_a_thousand_words_and_some_more_so_never_forget_a_caption" />
+    <!--TODO clicking on post shows complete description
+        android:ellipsize="end"
+        android:maxLines="3"
+-->
 </LinearLayout>
