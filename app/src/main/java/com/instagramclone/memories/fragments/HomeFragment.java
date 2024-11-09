@@ -66,6 +66,8 @@ public class HomeFragment extends Fragment {
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
+        query.setLimit(20);
+        query.addDescendingOrder(Post.KEY_CREATED_AT);
 
         query.findInBackground((posts, e) -> {
             if (e != null) {
@@ -73,7 +75,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
                 for (Post post : posts) {
-                    Log.i(TAG, "Post " + post.getDescription() + ", Username: " + post.getUser().getUsername());
+                    Log.i(TAG, "Post " + post.getDescription() + ", Username: " + post.getUser().getUsername() + post.getCreatedAt());
                 }
                 allPosts.addAll(posts);
                 Log.i(TAG, "added posts");

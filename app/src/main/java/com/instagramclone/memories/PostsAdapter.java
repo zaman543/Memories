@@ -7,13 +7,13 @@ import android.view.ViewGroup;
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.instagramclone.memories.models.Post;
 
+import java.text.DateFormat;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
@@ -49,20 +49,20 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
         private TextView tvUsername;
         private TextView tvPostDescription;
         private ImageView ivImage;
+        private TextView tvTimestamp;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvPostDescription = itemView.findViewById(R.id.tvPostDescription);
             tvUsername = itemView.findViewById(R.id.tvUsername);
             ivImage = itemView.findViewById(R.id.ivImage);
-            Log.i("PostsAdapter", "created viewholder for posts adapter");
+            tvTimestamp = itemView.findViewById(R.id.tvTimestamp);
         }
 
         public void bind(Post post) {
             tvPostDescription.setText(post.getDescription());
-            Log.i("PostsAdapter", "binded description");
             tvUsername.setText(post.getUser().getUsername());
-            if(post.getImage() != null)
-                Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
+            Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
+            tvTimestamp.setText(DateFormat.getDateInstance().format(post.getCreatedAt()));
         }
     }
 }
