@@ -21,33 +21,35 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         if(ParseUser.getCurrentUser() != null) {
-            goMainActivity();
+            goToActivity(new Intent(this, MainActivity.class));
         }
 
         etUsername = findViewById(R.id.etUsername);
         etPassword = findViewById(R.id.etPassword);
         Button btnLogin = findViewById(R.id.btnLogin);
+        Button btnToSignup = findViewById(R.id.btnToSignup);
         btnLogin.setOnClickListener(v -> {
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
             loginUser(username, password);
         });
+
+        btnToSignup.setOnClickListener(v -> goToActivity(new Intent(this, SignupActivity.class)));
     }
 
     private void loginUser(String username, String password) {
         ParseUser.logInInBackground(username, password, (user, e) -> {
             if(e != null) {
                 Log.e(TAG, "Issue with login", e);
+                //update error handling to show a text on the screen with e.getMessage()
                 return;
             }
-            goMainActivity();
+            goToActivity(new Intent(this, MainActivity.class));
         });
     }
 
-    private void goMainActivity() {
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        startActivity(mainActivityIntent);
+    private void goToActivity(Intent intent) {
+        startActivity(intent);
         finish();
     }
-
 }

@@ -7,7 +7,7 @@
     tools:context=".LoginActivity">
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/etPassword"
@@ -15,7 +15,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/text"
-        android:text="@string/log_in"
+        android:text="@string/sign"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         app:cornerRadius="20dp"
@@ -25,15 +25,15 @@
         tools:ignore="TextContrastCheck" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnToSignup"
+        android:id="@+id/btnToLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnLogin"
+        android:layout_below="@+id/btnSignup"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/text"
-        android:text="@string/sign"
+        android:text="@string/log_in"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         app:cornerRadius="20dp"
@@ -58,7 +58,7 @@
         android:id="@+id/etUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/appLogo"
+        android:layout_below="@id/etsEmail"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="30dp"
@@ -67,6 +67,24 @@
         android:ems="10"
         android:hint="@string/username"
         android:inputType="textPersonName"
+        android:minHeight="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etsEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appLogo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="5dp"
+        android:autofillHints="username"
+        android:ems="10"
+        android:hint="@string/email"
+        android:inputType="textEmailAddress"
         android:minHeight="55dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
