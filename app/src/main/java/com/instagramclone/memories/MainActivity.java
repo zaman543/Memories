@@ -3,7 +3,6 @@ package com.instagramclone.memories;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -26,14 +25,13 @@ import android.widget.Toast;
 
 import com.instagramclone.memories.models.Post;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.ParseQuery;
 
 import java.io.File;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-
     public static final String TAG = "MainActivity";
     private EditText etCaption;
     private Button btnCaptureImage;
@@ -42,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private File photoFile;
     private String photoFileName = "photo.jpg";
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -54,20 +51,19 @@ public class MainActivity extends AppCompatActivity {
 
         btnCaptureImage.setOnClickListener(v -> launchCamera());
 
-       // queryPosts();
+        //queryPosts();
 
         btnSubmit.setOnClickListener(v -> {
-            String caption = etCaption.getText().toString();
-            if(caption.isEmpty()) {
-                Toast.makeText(MainActivity.this, "Description can't be empty", Toast.LENGTH_SHORT).show();
+            String description = etCaption.getText().toString();
+            if(description.isEmpty()) {
+                Toast.makeText(MainActivity.this, "Caption can't be blank", Toast.LENGTH_SHORT).show();
                 return;
             }
             if(photoFile == null || ivPostImage.getDrawable() == null) {
-                Toast.makeText(MainActivity.this, "There is no image!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Can't submit without image", Toast.LENGTH_SHORT).show();
                 return;
             }
-            ParseUser currentUser = ParseUser.getCurrentUser();
-            savePost(caption, currentUser, photoFile);
+            savePost(description, ParseUser.getCurrentUser(), photoFile);
         });
     }
 
@@ -84,18 +80,17 @@ public class MainActivity extends AppCompatActivity {
         startActivity(loginActivityIntent);
         finish();
     }
-
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == R.id.log_out){
+        if(item.getItemId() == R.id.log_out) {
             ParseUser.logOut();
             goLoginActivity();
         }
         return true;
     }
 
+    //replacement for deprecated StartActivityForResult
     ActivityResultContracts.TakePicture pictureContract = new ActivityResultContracts.TakePicture() {
         @NonNull
-        @CallSuper
         @Override
         public Intent createIntent(@NonNull Context context, @NonNull Uri input) {
             super.createIntent(context, input);
@@ -105,32 +100,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    ActivityResultLauncher<Uri> cameraResultLauncher = registerForActivityResult(pictureContract, new ActivityResultCallback<Boolean>() {
+    ActivityResultLauncher<Uri> cameraResultLauncher = registerForActivityResult(pictureContract, new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(Boolean result) {
             if(result) {
-                //camera photo is saved to storage
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                //resize bitmap
-                //load the taken image into a preview
-                //you might run into out of memory
-                //store / resize bitmap to a smaller one
-                ImageView ivPreview = findViewById(R.id.ivPostImage);
-                ivPreview.setImageBitmap(takenImage);
+                    //camera photo is saved to storage
+                    Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                    //resize bitmap, then load image into preview if memory issues
+                    ImageView ivPreview = findViewById(R.id.ivPostImage);
+                    ivPreview.setImageBitmap(takenImage);
             } else {
-                Toast.makeText(MainActivity.this, "Picture not taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     });
 
-    public void launchCamera() {
-        //intent will take a picture and return control to app
-        //we are making an intent for an action - image capture
-        //we want to tell the app we are launching where to put the output
-
-        //input: (uri) pointer to file to put image into
+    //intent will take a picture and return control to app
+    //we are making an intent for an action - image capture
+    //we want to tell the app we are launching where to put the output
+    //input: (uri) pointer to file to put image into
+    private void launchCamera() {
         photoFile = getPhotoFileUri(photoFileName);
-        Uri input = FileProvider.getUriForFile(MainActivity.this, "com.codepath.fileprovider", photoFile);
+        Uri input = FileProvider.getUriForFile(MainActivity.this, "com.memories.fileprovider", photoFile);
         cameraResultLauncher.launch(input);
     }
 
@@ -143,46 +134,45 @@ public class MainActivity extends AppCompatActivity {
     //using the FileProvider class
     //we are saying: application launched from our app has access to our external storage directory
     //now camera will be able to access file provider
-    private File getPhotoFileUri(String photoFileName) {
+    private File getPhotoFileUri(String fileName) {
         File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+
         if(!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
-            Log.d(TAG, "getPhotoFileUri: failed to create directory");
+            Log.d(TAG, "Failed to create directory");
         }
 
-        return new File(mediaStorageDir.getPath() + File.separator + photoFileName);
+        return new File(mediaStorageDir.getPath() + File.separator + fileName);
+
     }
 
-    private void savePost(String caption, ParseUser currentUser, File photoFile) {
+    private void savePost(String description, ParseUser currentUser, File photoFile) {
         Post post = new Post();
-        post.setCaption(caption);
+        post.setUser(currentUser);
+        post.setDescription(description);
         post.setImage(new ParseFile(photoFile));
-        Log.i(TAG, "savePost: caption is " + post.getCaption());
-        post.setAuthor(currentUser);
         post.saveInBackground(e -> {
-            if(e != null) {
-                Log.e(TAG, "error while saving", e);
-                Toast.makeText(MainActivity.this, "Error saving! " + e, Toast.LENGTH_SHORT).show();
+            if(e == null) {
+                Log.i(TAG,"Saved post");
+                etCaption.setText("");
+                ivPostImage.setImageResource(0);
+            } else {
+                Log.e("Failed to save post", Objects.requireNonNull(e.getMessage()));
             }
-            Log.i(TAG, "successfully saved post!");
-            Toast.makeText(MainActivity.this, "successfully saved post!", Toast.LENGTH_SHORT).show();
-            etCaption.setText("");
-            ivPostImage.setImageResource(0);
         });
     }
 
     private void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.include(Post.KEY_USER);
 
         query.findInBackground((posts, e) -> {
-            if(e != null) {
+            if (e != null) {
                 Log.e(TAG, "Issue with getting posts", e);
-                Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                return;
-            }
-            for(Post post1 : posts) {
-                Log.i(TAG, "Post: " + post1.getCaption() + ", username: " + post1.getAuthor().getUsername());
-                Toast.makeText(MainActivity.this, post1.getCaption() + " ", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            } else {
+                for (Post post : posts) {
+                    Log.i(TAG, "Post " + post.getDescription() + ", Username: " + post.getUser().getUsername());
+                }
             }
         });
     }

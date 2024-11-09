@@ -7,7 +7,6 @@ import com.parse.ParseUser;
 
 @ParseClassName("Post")
 public class Post extends ParseObject {
-
     public static final String KEY_DESCRIPTION = "Description";
     public static final String KEY_IMAGE = "Image";
     public static final String KEY_USER = "User";
@@ -15,12 +14,11 @@ public class Post extends ParseObject {
     public Post() {
         super();
     }
-
-    public String getCaption() {
+    public String getDescription() {
         return getString(KEY_DESCRIPTION);
     }
 
-    public void setCaption(String description) {
+    public void setDescription(String description) {
         put(KEY_DESCRIPTION, description);
     }
 
@@ -28,16 +26,15 @@ public class Post extends ParseObject {
         return getParseFile(KEY_IMAGE);
     }
 
-    public void setImage(ParseFile parseFile) {
-        put(KEY_IMAGE, parseFile);
+    public void setImage(ParseFile parsefile) {
+        put(KEY_IMAGE, parsefile);
     }
 
-    public ParseUser getAuthor() {
-        return getParseUser("author");
+    public ParseUser getUser() {
+        return getParseUser(KEY_USER);
     }
 
-    public void setAuthor(ParseUser author) {
-        put(KEY_USER, author);
+    public void setUser(ParseUser user) {
+        put(KEY_USER, user);
     }
-
 }

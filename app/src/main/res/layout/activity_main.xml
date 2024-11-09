@@ -46,9 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="10dp"
+            android:contentDescription="@string/taken_picture"
             tools:ignore="ImageContrastCheck"
-            tools:srcCompat="@tools:sample/avatars"
-            android:contentDescription="@string/taken_picture"/>
+            tools:srcCompat="@tools:sample/avatars" />
 
         <Button
             android:id="@+id/btnSubmit"
