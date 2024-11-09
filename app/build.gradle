@@ -1,26 +1,31 @@
 plugins {
-    id 'com.android.application'
+    alias(libs.plugins.android.application)
 }
 
-def apikeyPropertiesFile = rootProject.file("apikey.properties")
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
-
 android {
-    compileSdk 31
+    namespace 'com.instagramclone.memories'
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.instagramclone.memories"
         minSdk 21
-        targetSdk 31
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "APPLICATION_ID", apikeyProperties['APPLICATION_ID'])
-        buildConfigField("String", "CLIENT_KEY", apikeyProperties['CLIENT_KEY'])
-        buildConfigField("String", "SERVER", apikeyProperties['SERVER'])
+        def apikeyProperties = rootProject.file("apikey.properties")
+        def properties = new Properties()
+        if (apikeyProperties.exists()) {
+            properties.load(new FileInputStream(apikeyProperties))
+        } else {
+            throw new FileNotFoundException("apikey.properties file not found!")
+        }
+
+        buildConfigField("String", "APPLICATION_ID", "\"${properties['APPLICATION_ID']}\"")
+        buildConfigField("String", "CLIENT_KEY", "\"${properties['CLIENT_KEY']}\"")
+        buildConfigField("String", "SERVER", "\"${properties['SERVER']}\"")
     }
 
     buildTypes {
@@ -30,18 +35,22 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        buildConfig = true
     }
 }
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation "com.github.parse-community.Parse-SDK-Android:parse:1.25.0"
+    implementation libs.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+
+    implementation libs.constraintlayout
+    implementation libs.parse.sdk.android.parse
 }
