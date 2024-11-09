@@ -104,11 +104,14 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onActivityResult(Boolean result) {
             if(result) {
-                    //camera photo is saved to storage
-                    Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                    //resize bitmap, then load image into preview if memory issues
-                    ImageView ivPreview = findViewById(R.id.ivPostImage);
-                    ivPreview.setImageBitmap(takenImage);
+                //camera photo is saved to storage
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                float aspectRatio = takenImage.getWidth() / (float) takenImage.getHeight();
+                int width = 800;
+                int height = Math.round(width/aspectRatio);
+                Bitmap scaled = Bitmap.createScaledBitmap(takenImage, width, height, false);
+                ImageView ivPreview = findViewById(R.id.ivPostImage);
+                ivPreview.setImageBitmap(scaled);
             } else {
                 Toast.makeText(MainActivity.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
