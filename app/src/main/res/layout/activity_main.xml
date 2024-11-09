@@ -1,63 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_margin="0dp"
     android:orientation="vertical"
     android:padding="0dp"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:orientation="vertical"
-        android:padding="10dp">
-
-        <EditText
-            android:id="@+id/etCaption"
+        <FrameLayout
+            android:id="@+id/flContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="textMultiLine|textNoSuggestions"
-            android:padding="20dp"
-            android:hint="@string/a_picture_should_be_worth_a_thousand_words_and_some_more_so_never_forget_a_caption"
-            android:importantForAutofill="no"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottomNavigation"
             />
 
-        <Button
-            android:id="@+id/btnCaptureImage"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="@string/take_picture"
-            app:cornerRadius="15dp" />
-
-        <ImageView
-            android:id="@+id/ivPostImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:contentDescription="@string/taken_picture"
-            tools:ignore="ImageContrastCheck"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:fontFamily="sans-serif"
-            android:padding="10dp"
-            android:text="@string/submit"
-            app:cornerRadius="15dp" />
-    </LinearLayout>
-</ScrollView>
+            android:layout_gravity="bottom"
+            app:menu="@menu/menu_bottom_navigation" />
+</RelativeLayout>
