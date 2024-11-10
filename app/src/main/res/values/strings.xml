@@ -14,4 +14,5 @@
     <string name="compose">Compose</string>
     <string name="profile">Profile</string>
     <string name="post_image">Post Image</string>
+    <string name="time">Timestamp</string>
 </resources>

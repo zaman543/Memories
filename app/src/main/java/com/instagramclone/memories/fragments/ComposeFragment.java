@@ -42,6 +42,7 @@ public class ComposeFragment extends Fragment {
     private Button btnSubmit;
     private File photoFile;
     private String photoFileName = "photo.jpg";
+    ActivityResultLauncher<Uri> cameraResultLauncher;
 
     public ComposeFragment() {
         // Required empty public constructor
@@ -71,6 +72,22 @@ public class ComposeFragment extends Fragment {
         ivPostImage = view.findViewById(R.id.ivPostImage);
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
+        //moved here for problem: You must ensure the ActivityResultLauncher is registered before calling launch().
+        cameraResultLauncher = registerForActivityResult(pictureContract, result -> {
+            if(result) {
+                //camera photo is saved to storage
+                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                float aspectRatio = takenImage.getWidth() / (float) takenImage.getHeight();
+                int width = 800;
+                int height = Math.round(width/aspectRatio);
+                Bitmap scaled = Bitmap.createScaledBitmap(takenImage, width, height, false);
+                ImageView ivPreview = requireView().findViewById(R.id.ivPostImage);
+                ivPreview.setImageBitmap(scaled);
+            } else {
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         btnCaptureImage.setOnClickListener(v -> launchCamera());
 
         btnSubmit.setOnClickListener(v -> {
@@ -85,6 +102,8 @@ public class ComposeFragment extends Fragment {
             }
             savePost(description, ParseUser.getCurrentUser(), photoFile);
         });
+
+
     }
 
 
@@ -99,24 +118,6 @@ public class ComposeFragment extends Fragment {
             return intent;
         }
     };
-
-    ActivityResultLauncher<Uri> cameraResultLauncher = registerForActivityResult(pictureContract, new ActivityResultCallback<>() {
-        @Override
-        public void onActivityResult(Boolean result) {
-            if(result) {
-                //camera photo is saved to storage
-                Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                float aspectRatio = takenImage.getWidth() / (float) takenImage.getHeight();
-                int width = 800;
-                int height = Math.round(width/aspectRatio);
-                Bitmap scaled = Bitmap.createScaledBitmap(takenImage, width, height, false);
-                ImageView ivPreview = requireView().findViewById(R.id.ivPostImage);
-                ivPreview.setImageBitmap(scaled);
-            } else {
-                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
-            }
-        }
-    });
 
     //intent will take a picture and return control to app
     //we are making an intent for an action - image capture

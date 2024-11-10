@@ -62,7 +62,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvPostDescription.setText(post.getDescription());
             tvUsername.setText(post.getUser().getUsername());
             Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
-            tvTimestamp.setText(DateFormat.getDateInstance().format(post.getCreatedAt()));
+            tvTimestamp.setText(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(post.getCreatedAt()));
         }
     }
 }
