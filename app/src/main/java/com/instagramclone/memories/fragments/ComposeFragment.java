@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -37,18 +36,12 @@ import java.util.Objects;
 public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
     private EditText etCaption;
-    private Button btnCaptureImage;
     private ImageView ivPostImage;
-    private Button btnSubmit;
     private File photoFile;
-    private String photoFileName = "photo.jpg";
     ActivityResultLauncher<Uri> cameraResultLauncher;
 
-    public ComposeFragment() {
-        // Required empty public constructor
-    }
-
-
+    // Required empty public constructor
+    public ComposeFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +61,9 @@ public class ComposeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         etCaption = view.findViewById(R.id.etCaption);
-        btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
+        Button btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         ivPostImage = view.findViewById(R.id.ivPostImage);
-        btnSubmit = view.findViewById(R.id.btnSubmit);
+        Button btnSubmit = view.findViewById(R.id.btnSubmit);
 
         //moved here for problem: You must ensure the ActivityResultLauncher is registered before calling launch().
         cameraResultLauncher = registerForActivityResult(pictureContract, result -> {
@@ -124,6 +117,7 @@ public class ComposeFragment extends Fragment {
     //we want to tell the app we are launching where to put the output
     //input: (uri) pointer to file to put image into
     private void launchCamera() {
+        String photoFileName = "photo.jpg";
         photoFile = getPhotoFileUri(photoFileName);
         Uri input = FileProvider.getUriForFile(requireContext(), "com.memories.fileprovider", photoFile);
         cameraResultLauncher.launch(input);

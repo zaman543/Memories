@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
-
     public static final String TAG = "HomeFragment";
     protected PostsAdapter adapter;
     protected List<Post> allPosts;
@@ -47,20 +46,20 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //Steps to use recycler view:
+        //1. create layout for a row of the view: item_post.xml
         RecyclerView rvHome = view.findViewById(R.id.rvHome);
+        //2. the data source: Post model
         allPosts = new ArrayList<>();
+        //3. create adapter: PostsAdapter
         adapter = new PostsAdapter(getContext(), allPosts);
+        //4. set the adapter on the recycler view
         rvHome.setAdapter(adapter);
+        //5. set the layout manager on the recycler view
         rvHome.setLayoutManager(new LinearLayoutManager(getContext()));
         queryPosts();
     }
-
-    //using recycler view:
-        //layout for a row of the view: item_post.xml
-        //create adapter: PostsAdapter
-        //the data source: Post model
-        //set the adapter on the recycler view - on view created
-        //set the layout manager on the recycler view onviewcreated
 
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);

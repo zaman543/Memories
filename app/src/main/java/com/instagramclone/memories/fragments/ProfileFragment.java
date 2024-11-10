@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,18 +16,24 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.instagramclone.memories.LoginActivity;
 import com.instagramclone.memories.ProfilePostsAdapter;
 import com.instagramclone.memories.R;
 import com.instagramclone.memories.models.Post;
+
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ProfileFragment extends HomeFragment {
     public static final String TAG = "ProfileFragment";
+
     private ProfilePostsAdapter adapter;
+    ImageView ivProfilePgPic;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,6 +47,8 @@ public class ProfileFragment extends HomeFragment {
         RecyclerView rvUserPosts = view.findViewById(R.id.rvUserPosts);
         TextView tvUsernameProfile = view.findViewById(R.id.tvUsernameProfile);
         ImageButton btnLogout = view.findViewById(R.id.btnLogout);
+        ivProfilePgPic = view.findViewById(R.id.ivProfilePgPic);
+
         allPosts = new ArrayList<>();
         adapter = new ProfilePostsAdapter(getContext(), allPosts);
 
@@ -51,7 +60,20 @@ public class ProfileFragment extends HomeFragment {
         });
         tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
 
+        queryPicture();
         queryPosts();
+    }
+
+    private void queryPicture() {
+        ParseQuery<ParseUser> currentUser = ParseUser.getQuery();
+        currentUser.whereEqualTo("username", ParseUser.getCurrentUser().getUsername()).getFirstInBackground((user, e) -> {
+            if(e == null) {
+                String pic = Objects.requireNonNull(user.getParseFile("profilePicture")).getUrl();
+                Glide.with(requireContext()).load(pic).into(ivProfilePgPic);
+            } else {
+                Log.e(TAG, "couldn't get user", e);
+            }
+        });
     }
 
     @Override
@@ -67,11 +89,7 @@ public class ProfileFragment extends HomeFragment {
                 Log.e(TAG, "Issue with getting posts", e);
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
-                for (Post post : posts) {
-                    Log.i(TAG, "Post " + post.getDescription() + ", Username: " + post.getUser().getUsername() + post.getCreatedAt());
-                }
                 allPosts.addAll(posts);
-                Log.i(TAG, "added posts");
                 adapter.notifyDataSetChanged();
             }
         });
@@ -82,5 +100,4 @@ public class ProfileFragment extends HomeFragment {
         startActivity(loginActivityIntent);
         requireActivity().finish();
     }
-
 }
