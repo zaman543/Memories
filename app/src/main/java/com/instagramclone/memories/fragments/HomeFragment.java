@@ -25,12 +25,11 @@ import java.util.List;
 public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
-    private PostsAdapter adapter;
-    private List<Post> allPosts;
+    protected PostsAdapter adapter;
+    protected List<Post> allPosts;
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    // Required empty public constructor
+    public HomeFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,7 +62,7 @@ public class HomeFragment extends Fragment {
         //set the adapter on the recycler view - on view created
         //set the layout manager on the recycler view onviewcreated
 
-    private void queryPosts() {
+    protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
         query.setLimit(20);

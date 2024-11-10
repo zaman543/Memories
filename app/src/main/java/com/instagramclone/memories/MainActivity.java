@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final Fragment fragment1 = new HomeFragment();
         final Fragment fragment2 = new ComposeFragment();
-        //final Fragment fragment3 = new ProfileFragment();
+        final Fragment fragment3 = new ProfileFragment();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.action_compose) {
                 fragment = fragment2;
             } else {
-                fragment = fragment2;
+                fragment = fragment3;
             }
             fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
             return true;
