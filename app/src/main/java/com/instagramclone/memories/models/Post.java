@@ -1,12 +1,16 @@
 package com.instagramclone.memories.models;
 
+//TODO import android.os.Parcelable;
+
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import java.io.Serializable;
+
 @ParseClassName("Post")
-public class Post extends ParseObject {
+public class Post extends ParseObject implements Serializable {
     public static final String KEY_DESCRIPTION = "Description";
     public static final String KEY_IMAGE = "Image";
     public static final String KEY_USER = "User";
