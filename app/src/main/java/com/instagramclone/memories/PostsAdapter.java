@@ -1,5 +1,6 @@
 package com.instagramclone.memories;
 
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,9 +8,12 @@ import android.content.Context;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.instagramclone.memories.fragments.DetailFragment;
 import com.instagramclone.memories.models.Post;
 
 import java.text.DateFormat;
@@ -67,6 +71,19 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Glide.with(context).load(post.getImage().getUrl()).into(ivImage);
             tvTimestamp.setText(DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT).format(post.getCreatedAt()));
             Glide.with(context).load(Objects.requireNonNull(post.getUser().getParseFile("profilePicture")).getUrl()).into(ivPostProfilePic);
+
+            ivImage.setOnClickListener(e -> launchDetailFragment(post));
+            tvPostDescription.setOnClickListener(e -> launchDetailFragment(post));
+        }
+
+        private void launchDetailFragment(Post post) {
+            Fragment f = new DetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("post", post);
+            f.setArguments(bundle);
+
+            AppCompatActivity activity = (AppCompatActivity) context;
+            activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, f).addToBackStack(null).commit();
         }
     }
 }

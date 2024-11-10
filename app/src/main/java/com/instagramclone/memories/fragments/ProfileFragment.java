@@ -60,8 +60,8 @@ public class ProfileFragment extends HomeFragment {
         });
         tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
 
-        queryPicture();
         queryPosts();
+        queryPicture();
     }
 
     private void queryPicture() {

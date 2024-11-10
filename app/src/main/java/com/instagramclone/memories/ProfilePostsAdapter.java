@@ -55,15 +55,17 @@ public class ProfilePostsAdapter extends RecyclerView.Adapter<ProfilePostsAdapte
 
         public void bind(Post post) {
             Glide.with(context).load(post.getImage().getUrl()).into(ivProfilePost);
-            ivProfilePost.setOnClickListener(e -> {
-                Fragment f = new DetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("post", post);
-                f.setArguments(bundle);
+            ivProfilePost.setOnClickListener(e -> launchDetailFragment(post));
+        }
 
-                AppCompatActivity activity = (AppCompatActivity) context;
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, f).addToBackStack(null).commit();
-            });
+        private void launchDetailFragment(Post post) {
+            Fragment f = new DetailFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("post", post);
+            f.setArguments(bundle);
+
+            AppCompatActivity activity = (AppCompatActivity) context;
+            activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, f).addToBackStack(null).commit();
         }
     }
 }
