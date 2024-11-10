@@ -6,7 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,18 +38,18 @@ public class ProfileFragment extends HomeFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         RecyclerView rvUserPosts = view.findViewById(R.id.rvUserPosts);
-        //TextView tvUsernameProfile = view.findViewById(R.id.tvUsernameProfile);
-        //Button btnLogout = view.findViewById(R.id.btnLogout);
+        TextView tvUsernameProfile = view.findViewById(R.id.tvUsernameProfile);
+        ImageButton btnLogout = view.findViewById(R.id.btnLogout);
         allPosts = new ArrayList<>();
         adapter = new ProfilePostsAdapter(getContext(), allPosts);
 
         rvUserPosts.setAdapter(adapter);
         rvUserPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        //btnLogout.setOnClickListener(e -> {
-        //    ParseUser.logOut();
-        //    goLoginActivity();
-        //});
-        //tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
+        btnLogout.setOnClickListener(e -> {
+            ParseUser.logOut();
+            goLoginActivity();
+        });
+        tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
 
         queryPosts();
     }
