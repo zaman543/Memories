@@ -1,5 +1,7 @@
 package com.instagramclone.memories.fragments;
 
+import static android.view.View.GONE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.instagramclone.memories.LoginActivity;
 import com.instagramclone.memories.ProfilePostsAdapter;
 import com.instagramclone.memories.R;
@@ -32,7 +35,8 @@ public class ProfileFragment extends HomeFragment {
     public static final String TAG = "ProfileFragment";
 
     private ProfilePostsAdapter adapter;
-    ImageView ivProfilePgPic;
+    private ImageView ivProfilePgPic;
+    private ParseUser user;
 
 
     @Override
@@ -49,16 +53,25 @@ public class ProfileFragment extends HomeFragment {
         ImageButton btnLogout = view.findViewById(R.id.btnLogout);
         ivProfilePgPic = view.findViewById(R.id.ivProfilePgPic);
 
+        user = ParseUser.getCurrentUser();
+        if(user == ParseUser.getCurrentUser()) {
+            BottomNavigationView bottomNav = view.getRootView().findViewById(R.id.bottomNavigation);
+            bottomNav.getMenu().getItem(2).setChecked(true);
+            btnLogout.setOnClickListener(e -> {
+                ParseUser.logOut();
+                goLoginActivity();
+            });
+        } else {
+            btnLogout.setVisibility(GONE);
+        }
+
+
         allPosts = new ArrayList<>();
         adapter = new ProfilePostsAdapter(getContext(), allPosts);
-
         rvUserPosts.setAdapter(adapter);
         rvUserPosts.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        btnLogout.setOnClickListener(e -> {
-            ParseUser.logOut();
-            goLoginActivity();
-        });
-        tvUsernameProfile.setText(ParseUser.getCurrentUser().getUsername());
+
+        tvUsernameProfile.setText(user.getUsername());
 
         queryPosts();
         queryPicture();
@@ -66,7 +79,7 @@ public class ProfileFragment extends HomeFragment {
 
     private void queryPicture() {
         ParseQuery<ParseUser> currentUser = ParseUser.getQuery();
-        currentUser.whereEqualTo("username", ParseUser.getCurrentUser().getUsername()).getFirstInBackground((user, e) -> {
+        currentUser.whereEqualTo("username", user.getUsername()).getFirstInBackground((user, e) -> {
             if(e == null) {
                 String pic = Objects.requireNonNull(user.getParseFile("profilePicture")).getUrl();
                 Glide.with(requireContext()).load(pic).into(ivProfilePgPic);
@@ -80,7 +93,7 @@ public class ProfileFragment extends HomeFragment {
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);
-        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(Post.KEY_USER, user);
         query.setLimit(20);
         query.addDescendingOrder(Post.KEY_CREATED_AT);
 

@@ -13,7 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.instagramclone.memories.fragments.DetailFragment;
+import com.instagramclone.memories.fragments.ProfileFragment;
 import com.instagramclone.memories.models.Post;
 
 import java.text.DateFormat;
@@ -74,6 +76,13 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
 
             ivImage.setOnClickListener(e -> launchDetailFragment(post));
             tvPostDescription.setOnClickListener(e -> launchDetailFragment(post));
+
+            View username = itemView.findViewById(R.id.llNameAndPic);
+            username.setOnClickListener(e -> launchProfile());
+        }
+
+        private void launchProfile() {
+            launchFragment(new ProfileFragment());
         }
 
         private void launchDetailFragment(Post post) {
@@ -81,9 +90,12 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             Bundle bundle = new Bundle();
             bundle.putSerializable("post", post);
             f.setArguments(bundle);
+            launchFragment(f);
+        }
 
+        private void launchFragment(Fragment fragment) {
             AppCompatActivity activity = (AppCompatActivity) context;
-            activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, f).addToBackStack(null).commit();
+            activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
         }
     }
 }
