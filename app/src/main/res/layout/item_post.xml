@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="15dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="10dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:orientation="horizontal">
@@ -38,8 +38,10 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
                 android:text="@string/username"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@android:color/primary_text_light" />
 
         </LinearLayout>
 
@@ -55,7 +57,6 @@
         android:id="@+id/ivImage"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:layout_margin="10dp"
         android:layout_weight="1"
         android:contentDescription="@string/post_image"
         android:scaleType="centerCrop"
@@ -65,11 +66,15 @@
         android:id="@+id/tvPostDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="15dp"
         android:layout_weight="1"
+        android:fontFamily="sans-serif"
         android:minLines="1"
         android:singleLine="false"
-        android:text="@string/a_picture_should_be_worth_a_thousand_words_and_some_more_so_never_forget_a_caption" />
+        android:text="@string/a_picture_should_be_worth_a_thousand_words_and_some_more_so_never_forget_a_caption"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="14sp" />
+
     <!--TODO clicking on post shows complete description
         android:ellipsize="end"
         android:maxLines="3"
