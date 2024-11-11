@@ -38,6 +38,16 @@ public class ProfileFragment extends HomeFragment {
     private ImageView ivProfilePgPic;
     private ParseUser user;
 
+    public ProfileFragment() {
+
+        //if program randomly recreates this fragment at someone elses profile, its possible it may recreate to user's profile instead
+        user = ParseUser.getCurrentUser();
+    }
+
+    public ProfileFragment(ParseUser otherUser) {
+        user = otherUser;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,8 +63,7 @@ public class ProfileFragment extends HomeFragment {
         ImageButton btnLogout = view.findViewById(R.id.btnLogout);
         ivProfilePgPic = view.findViewById(R.id.ivProfilePgPic);
 
-        user = ParseUser.getCurrentUser();
-        if(user == ParseUser.getCurrentUser()) {
+        if(user.getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
             BottomNavigationView bottomNav = view.getRootView().findViewById(R.id.bottomNavigation);
             bottomNav.getMenu().getItem(2).setChecked(true);
             btnLogout.setOnClickListener(e -> {

@@ -54,7 +54,7 @@ public class DetailFragment extends Fragment {
         Glide.with(requireContext()).load(Objects.requireNonNull(post.getUser().getParseFile("profilePicture")).getUrl()).into(ivPostProfilePic);
 
         View username = view.findViewById(R.id.llNameAndPic);
-        username.setOnClickListener(e -> launchFragment(new ProfileFragment()));
+        username.setOnClickListener(e -> launchFragment(new ProfileFragment(post.getUser())));
     }
 
     private void launchFragment(Fragment fragment) {

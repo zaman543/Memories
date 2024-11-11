@@ -17,6 +17,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.instagramclone.memories.fragments.DetailFragment;
 import com.instagramclone.memories.fragments.ProfileFragment;
 import com.instagramclone.memories.models.Post;
+import com.parse.ParseUser;
 
 import java.text.DateFormat;
 import java.util.List;
@@ -78,11 +79,11 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
             tvPostDescription.setOnClickListener(e -> launchDetailFragment(post));
 
             View username = itemView.findViewById(R.id.llNameAndPic);
-            username.setOnClickListener(e -> launchProfile());
+            username.setOnClickListener(e -> launchProfile(post.getUser()));
         }
 
-        private void launchProfile() {
-            launchFragment(new ProfileFragment());
+        private void launchProfile(ParseUser user) {
+            launchFragment(new ProfileFragment(user));
         }
 
         private void launchDetailFragment(Post post) {
