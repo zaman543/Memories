@@ -11,6 +11,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
@@ -37,6 +38,7 @@ public class ComposeFragment extends Fragment {
     public static final String TAG = "ComposeFragment";
     private EditText etCaption;
     private ImageView ivPostImage;
+    Button btnSubmit;
     private File photoFile;
     ActivityResultLauncher<Uri> cameraResultLauncher;
 
@@ -51,6 +53,7 @@ public class ComposeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        requireActivity().setTitle("New Post");
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_compose, container, false);
     }
@@ -63,7 +66,7 @@ public class ComposeFragment extends Fragment {
         etCaption = view.findViewById(R.id.etCaption);
         Button btnCaptureImage = view.findViewById(R.id.btnCaptureImage);
         ivPostImage = view.findViewById(R.id.ivPostImage);
-        Button btnSubmit = view.findViewById(R.id.btnSubmit);
+        btnSubmit = view.findViewById(R.id.btnSubmit);
 
         //moved here for problem: You must ensure the ActivityResultLauncher is registered before calling launch().
         cameraResultLauncher = registerForActivityResult(pictureContract, result -> {
@@ -93,12 +96,10 @@ public class ComposeFragment extends Fragment {
                 Toast.makeText(getContext(), "Can't submit without image", Toast.LENGTH_SHORT).show();
                 return;
             }
+            btnSubmit.setText(R.string.saving);
             savePost(description, ParseUser.getCurrentUser(), photoFile);
         });
-
-
     }
-
 
     //replacement for deprecated StartActivityForResult
     ActivityResultContracts.TakePicture pictureContract = new ActivityResultContracts.TakePicture() {
@@ -138,9 +139,7 @@ public class ComposeFragment extends Fragment {
         if(!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(TAG, "Failed to create directory");
         }
-
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
-
     }
 
     private void savePost(String description, ParseUser currentUser, File photoFile) {
@@ -150,9 +149,12 @@ public class ComposeFragment extends Fragment {
         post.setImage(new ParseFile(photoFile));
         post.saveInBackground(e -> {
             if(e == null) {
-                Log.i(TAG,"Saved post");
+                Toast.makeText(requireContext(), "Posted!", Toast.LENGTH_SHORT).show();
                 etCaption.setText("");
                 ivPostImage.setImageResource(0);
+                btnSubmit.setText(R.string.submit);
+                AppCompatActivity activity = (AppCompatActivity) requireContext();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).addToBackStack(null).commit();
             } else {
                 Log.e("Failed to save post", Objects.requireNonNull(e.getMessage()));
             }

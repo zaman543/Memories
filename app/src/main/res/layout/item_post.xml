@@ -28,6 +28,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
+                android:background="@color/white"
                 android:contentDescription="@string/profile"
                 android:scaleType="fitCenter"
                 tools:srcCompat="@drawable/user" />
@@ -40,8 +41,8 @@
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/username"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@android:color/primary_text_light" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
