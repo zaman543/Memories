@@ -52,6 +52,7 @@ public class ProfileFragment extends HomeFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        requireActivity().setTitle(user.getUsername());
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -111,6 +112,9 @@ public class ProfileFragment extends HomeFragment {
                 Log.e(TAG, "Issue with getting posts", e);
                 Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             } else {
+                if(posts.isEmpty()) {
+                    Toast.makeText(requireContext(), "No posts to show!", Toast.LENGTH_SHORT).show();
+                }
                 allPosts.addAll(posts);
                 adapter.notifyDataSetChanged();
             }

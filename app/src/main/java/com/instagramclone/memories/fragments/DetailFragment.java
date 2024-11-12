@@ -35,6 +35,7 @@ public class DetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        requireActivity().setTitle("Viewing Post");
         return inflater.inflate(R.layout.item_post, container, false);
     }
 

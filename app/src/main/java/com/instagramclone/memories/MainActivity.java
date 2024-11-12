@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
             return true;
         });
+        setTitle("Feed");
         bottomNavigationView.setSelectedItemId(R.id.action_home);
     }
 }

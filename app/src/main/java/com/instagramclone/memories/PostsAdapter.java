@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.instagramclone.memories.fragments.DetailFragment;
 import com.instagramclone.memories.fragments.ProfileFragment;
 import com.instagramclone.memories.models.Post;
