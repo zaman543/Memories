@@ -10,6 +10,7 @@ import com.parse.ParseUser;
 import java.io.Serializable;
 
 @ParseClassName("Post")
+//TODO update to parcelable
 public class Post extends ParseObject implements Serializable {
     public static final String KEY_DESCRIPTION = "Description";
     public static final String KEY_IMAGE = "Image";

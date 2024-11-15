@@ -71,6 +71,17 @@ public class ProfileFragment extends HomeFragment {
                 ParseUser.logOut();
                 goLoginActivity();
             });
+            ivProfilePgPic.setOnClickListener(e -> {
+                Toast.makeText(requireContext(), "hello!", Toast.LENGTH_SHORT).show();
+                //TODO
+                //a)  allow user to take a picture - launch camera + upload as profile pic
+                    //this solution: 1. isolate camera launch into a separate activity or fragment
+                    //2. have the fragment launch every time camera is necessary
+                    //3. this fragment handles picture launch, and picture approval. it also handles picture retakes
+                    //call the fragment here and in compose fragment
+                //b) allow user to upload an image as a profile picture
+                //c) instead of having it silent, create a menu where user can edit profile picture and logout
+            });
         } else {
             btnLogout.setVisibility(GONE);
         }

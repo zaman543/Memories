@@ -40,7 +40,7 @@ public class ComposeFragment extends Fragment {
     private ImageView ivPostImage;
     Button btnSubmit;
     private File photoFile;
-    ActivityResultLauncher<Uri> cameraResultLauncher;
+   // ActivityResultLauncher<Uri> cameraResultLauncher;
 
     // Required empty public constructor
     public ComposeFragment() { }
@@ -69,7 +69,7 @@ public class ComposeFragment extends Fragment {
         btnSubmit = view.findViewById(R.id.btnSubmit);
 
         //moved here for problem: You must ensure the ActivityResultLauncher is registered before calling launch().
-        cameraResultLauncher = registerForActivityResult(pictureContract, result -> {
+        /*cameraResultLauncher = registerForActivityResult(pictureContract, result -> {
             if(result) {
                 //camera photo is saved to storage
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
@@ -82,9 +82,13 @@ public class ComposeFragment extends Fragment {
             } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
-        btnCaptureImage.setOnClickListener(v -> launchCamera());
+        btnCaptureImage.setOnClickListener(v -> {
+            goFragment(new CameraFragment());
+            //required: camera fragment must return a photofile that we can use to save post
+            //figure out how to go back to a fragment and send that file
+        });
 
         btnSubmit.setOnClickListener(v -> {
             String description = etCaption.getText().toString();
@@ -102,7 +106,7 @@ public class ComposeFragment extends Fragment {
     }
 
     //replacement for deprecated StartActivityForResult
-    ActivityResultContracts.TakePicture pictureContract = new ActivityResultContracts.TakePicture() {
+    /*ActivityResultContracts.TakePicture pictureContract = new ActivityResultContracts.TakePicture() {
         @NonNull
         @Override
         public Intent createIntent(@NonNull Context context, @NonNull Uri input) {
@@ -111,18 +115,18 @@ public class ComposeFragment extends Fragment {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, input);
             return intent;
         }
-    };
+    };*/
 
     //intent will take a picture and return control to app
     //we are making an intent for an action - image capture
     //we want to tell the app we are launching where to put the output
     //input: (uri) pointer to file to put image into
-    private void launchCamera() {
+    /*private void launchCamera() {
         String photoFileName = "photo.jpg";
         photoFile = getPhotoFileUri(photoFileName);
         Uri input = FileProvider.getUriForFile(requireContext(), "com.memories.fileprovider", photoFile);
         cameraResultLauncher.launch(input);
-    }
+    }*/
 
     //get photo file uniform file identifier - string identifying file - the img captured
     //sharing files with api 24 or higher: extra security restriction
@@ -133,14 +137,14 @@ public class ComposeFragment extends Fragment {
     //using the FileProvider class
     //we are saying: application launched from our app has access to our external storage directory
     //now camera will be able to access file provider
-    private File getPhotoFileUri(String fileName) {
+    /*private File getPhotoFileUri(String fileName) {
         File mediaStorageDir = new File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         if(!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) {
             Log.d(TAG, "Failed to create directory");
         }
         return new File(mediaStorageDir.getPath() + File.separator + fileName);
-    }
+    }*/
 
     private void savePost(String description, ParseUser currentUser, File photoFile) {
         Post post = new Post();
@@ -153,11 +157,15 @@ public class ComposeFragment extends Fragment {
                 etCaption.setText("");
                 ivPostImage.setImageResource(0);
                 btnSubmit.setText(R.string.submit);
-                AppCompatActivity activity = (AppCompatActivity) requireContext();
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new HomeFragment()).addToBackStack(null).commit();
+                goFragment(new HomeFragment());
             } else {
                 Log.e("Failed to save post", Objects.requireNonNull(e.getMessage()));
             }
         });
+
+    }
+    private void goFragment(Fragment fragment) {
+        AppCompatActivity activity = (AppCompatActivity) requireContext();
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, fragment).addToBackStack(null).commit();
     }
 }
