@@ -2,7 +2,6 @@ package com.instagramclone.memories.fragments;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +21,17 @@ import java.text.DateFormat;
 import java.util.Objects;
 
 public class DetailFragment extends Fragment {
-    public DetailFragment() {}
     Post post;
+
+    public DetailFragment() {}
 
     @SuppressLint("NewApi")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        assert getArguments() != null;
-        post = getArguments().getSerializable("post", Post.class);
+        if (getArguments() != null) {
+            post = getArguments().getSerializable("post", Post.class);
+        }
     }
 
     @Override
